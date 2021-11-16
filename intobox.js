@@ -15,27 +15,30 @@ let started = false;
 let ended = false;
 let clickedOnBall = false;
 let timerVar;
-/* TODO TO MAKE THIS WORK:
-* generate a ball and a box in random positions on ground [X]
-* store current pos of ball and pos of box as vars [X]
-* if ball and box are overlapping, regenerate them until they aren't [X]
-* when mouse held down, check if mouse is over ball [X]
-* if so, move ball along with mouse [X]
-* if ball is within bounds of box, mark success []
-*/
 
 function setup() {
     createCanvas(WIDTH, HEIGHT);
     frameRate(60);
     background('maroon');
+    stroke('black');
+    strokeWeight(5);
+    noFill();
+    square(0, 0, WIDTH, WIDTH);
 }
 
 function draw() {
-    if (!ended) { background('maroon'); }
+    if (!ended) {
+        background('maroon');
+        stroke('black');
+        strokeWeight(5);
+        noFill();
+        square(0, 0, WIDTH);
+    }
     if(!started && !ended) {
         fill('gold');
+        strokeWeight(1);
         textSize(20);
-        let texttoShow = "Drag the balls into the boxes to get points!\nHow many points can you get in " + TIME + " seconds?\n\nPress Enter to start!";
+        let texttoShow = "Drag the balls into the boxes to get points!\nHow many points can you get in " + TIME + " seconds?\n\nClick to start!";
         textAlign(CENTER, CENTER);
         text(texttoShow, WIDTH/2, WIDTH/2);
     }
@@ -63,15 +66,12 @@ function draw() {
     }
 }
 
-function keyPressed() {
-    if (!(keyCode === ENTER) || started) { return false; }
-    if (!started) {
-        started = true;
-        ended = false;
-        time = TIME;
-        score = 0;
-        timerVar = setInterval(timer, 1000);
-    }
+function beginGame() {
+    started = true;
+    ended = false;
+    time = TIME;
+    score = 0;
+    timerVar = setInterval(timer, 1000);
     drawShapes();
 }
 
@@ -94,6 +94,7 @@ function drawShapes() {
 function mousePressed() {
     if(withinBall()) { clickedOnBall = true; }
     else { clickedOnBall = false; }
+    if (!started) { beginGame(); }
 }
 
 function mouseDragged() {
@@ -146,7 +147,7 @@ function timer() {
 function avengersEndGame() {
     background('maroon');
     fill('gold');
-    text('You put away ' + score + ' balls in ' + TIME + ' seconds!\n\n Press Enter to play again!', WIDTH/2, WIDTH/2);
+    text('You put away ' + score + ' balls in ' + TIME + ' seconds!\n\nClick to play again!', WIDTH/2, WIDTH/2);
     ended = true;
     started = false;
     clearInterval(timerVar);

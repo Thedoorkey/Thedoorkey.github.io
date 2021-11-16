@@ -24,11 +24,10 @@ p1 {
     float: left;
     text-align: center;
     background-color: goldenrod;
-    padding-top: 40px;
-    width: 300px;
-    padding-bottom: 40px;
-    margin-right: 200px;
-    margin-bottom: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
 }
@@ -37,9 +36,22 @@ p2 {
     float: right;
     text-align: center;
     background-color: goldenrod;
-    padding-top: 40px;
-    width: 300px;
-    padding-bottom: 40px;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 24px;
+}
+
+p3 {
+    float: center;
+    text-align: center;
+    background-color: goldenrod;
+    padding-left: 100px;
+    padding-right: 100px;
+    padding-top: 50px;
+    padding-bottom: 50px;
     font-family: Arial, Helvetica, sans-serif;
     font-size: 24px;
 }

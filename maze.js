@@ -16,6 +16,7 @@ let currPos = [0, 0];           //stores mouse's current position in an array
 let mazeGenerated = false;      //tells when a maze is generated, resets every time a maze is beaten/lost
 let started = false;            //tells if the user has started playing a maze by hovering over the orange starting square
 let init = false;               //setup() is called to reset the board, don't want to run some parts of it more than once so i use this
+let mazesCompleted = 0;
 
 function setup() {  
     if (!init) { // everything in this if block will only run once
@@ -37,7 +38,7 @@ function setup() {
     background('maroon');
     textSize(20);
     textAlign(CENTER, CENTER);
-    let textToShow = 'Rules:\nMove the mouse to the orange box,\n or touch and hold the orange box to start.\nStay in the maze!\nGet to the blue box and you win!\nPress a key or touch the screen to play a maze.';
+    let textToShow = "Use your mouse to get from the orange square\n to the blue square!\n\nClick to start!"
     fill('gold');
     strokeWeight(1);
     stroke('black');
@@ -48,22 +49,38 @@ function setup() {
 function draw() {
     if (mazeGenerated && !started) { isItTime(); } //when maze is generated, waits for user to hover over orange starting square
     if (started) { //runs while user is playing
+        stroke('red');
+        line(mouseX, mouseY, pmouseX, pmouseY);
         if (!inBounds()) { //if user tries to cheat and/or is bad at maze navigation this will run
-            background('maroon');
+            fill('maroon');
+            rectMode(CENTER);
+            rect(WIDTH/2, WIDTH/2, WIDTH/2, WIDTH/2);
             started = false;
             mazeGenerated = false;
-            alert("You went out of bounds, try again!");
-            setup();
+            fill('gold');
+            strokeWeight(1);
+            stroke('black');
+            text("You went out of bounds!\n\nClick to try again!", WIDTH/2, WIDTH/2);
         }
         else if (finishLine()) { //runs if the user makes it to blue square
-            background('maroon');
+            fill('maroon');
+            rectMode(CENTER);
+            rect(WIDTH/2, WIDTH/2, WIDTH/2, WIDTH/2);
             started = false;
             mazeGenerated = false;
-            alert("Good job! You beat the maze!")
-            setup();
+            fill('gold');
+            strokeWeight(1);
+            stroke('black');
+            mazesCompleted++;
+            let completeText = "Good job! You won!\nYou've beat " + mazesCompleted;
+            if (mazesCompleted == 1) { completeText += " maze!"; }
+            else {completeText += " mazes!"; }
+            completeText += "\n\nClick to play again!"
+            text(completeText, WIDTH/2, WIDTH/2);
         }
     }
 }
+
 
 async function isItTime() { //async because the page will hang if it isn't ¯\_(ツ)_/¯
     let closestX = round((mouseX+50)/100)*100-50;   //these two vars store the mouse's x/y position,
@@ -72,7 +89,7 @@ async function isItTime() { //async because the page will hang if it isn't ¯\_(
     let relativeY = Math.round(Math.abs(mouseY - closestY));    //rounded to the nearest integer
 
     currPos = [closestX, closestY]; //stores current mouse location to array
-    if (currPos[0] == startPoint[0] && currPos[1] == startPoint[1] && !started && relativeX <= RECT_RADIUS && relativeY <= RECT_RADIUS) { //pretty long if statement we got here. hello from the far east
+    if (currPos[0] == startPoint[0] && currPos[1] == startPoint[1] && !started && relativeX <= (4*RECT_RADIUS)/5 && relativeY <= (4*RECT_RADIUS)/5) { //pretty long if statement we got here. hello from the far east
         started = true;
         fill('red');
         rect(startPoint[0], startPoint[1], RECT_RADIUS, RECT_RADIUS);
@@ -83,9 +100,11 @@ async function isItTime() { //async because the page will hang if it isn't ¯\_(
 function finishLine() { //basically the same as isItTime() but for checking if user made it to blue finish square
     let closestX = round((mouseX+50)/100)*100-50;
     let closestY = round((mouseY+50)/100)*100-50;
+    let relativeX = Math.round(Math.abs(mouseX - closestX));
+    let relativeY = Math.round(Math.abs(mouseY - closestY));
 
     currPos = [closestX, closestY];
-    if (currPos[0] == finalPoint[0] && currPos[1] == finalPoint[1]) {
+    if (currPos[0] == finalPoint[0] && currPos[1] == finalPoint[1] && relativeX <= (4*RECT_RADIUS)/5 && relativeY <= (4*RECT_RADIUS)/5) {
         return true;
     }
     return false;
@@ -152,7 +171,7 @@ function inBounds() { //p5js doesn't have a method for checking what color the m
     return connectOK;
 }
 
-function keyPressed() {
+function generateMaze() {
     background('maroon');
     started = false;
     map = [];
@@ -223,25 +242,34 @@ function keyPressed() {
 
 function mousePressed() {
     if (mouseButton === RIGHT) { //right clicking kills the in bounds detection, no cheating allowed
-        alert("No right clicking allowed!");
-        background('maroon');
+        fill('maroon');
+        rectMode(CENTER);
+        rect(WIDTH/2, WIDTH/2, WIDTH/2, WIDTH/2);
         started = false;
         mazeGenerated = false;
-        setup();
+        fill('gold');
+        strokeWeight(1);
+        stroke('black');
+        text("Hey, no right clicking!\n\nClick to play again!", WIDTH/2, WIDTH/2);
     }
+    else if (mouseButton === LEFT && !mazeGenerated) { generateMaze(); }
 }
 
 function touchStarted() {
-    if (!mazeGenerated) { keyPressed(); }
+    if (!mazeGenerated) { generateMaze(); }
     else if (!started) { isItTime(); }
 }
 
 function touchReleased() {
     if (started && !finishLine()) {
-        background('maroon');
+        fill('maroon');
+        rectMode(CENTER);
+        rect(WIDTH/2, WIDTH/2, WIDTH/2, WIDTH/2);
         started = false;
         mazeGenerated = false;
-        alert("You let go too soon, try again!");
-        setup();
+        fill('gold');
+        strokeWeight(1);
+        stroke('black');
+        text("You let go too soon!\n\nClick to play again!", WIDTH/2, WIDTH/2);
     }
 }

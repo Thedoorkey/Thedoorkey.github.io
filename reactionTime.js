@@ -2,6 +2,7 @@
 //editable constants
 const WIDTH = 500;
 const FRAMERATE = 60;
+const TIME = 30;
 
 //don't edit these constants
 let init = false;
@@ -9,7 +10,7 @@ const RAD_BUTTON = 100;
 let buttonX = WIDTH/2;
 let buttonY = WIDTH/2;
 let score = 0;
-let timeLeft = 30;
+let timeLeft = TIME;
 let started = false;
 let gameEnd = false;
 let timerVar;
@@ -21,12 +22,12 @@ function setup() {
         init = true;
         
     }
-    background(220);
+    background('maroon');
     textSize(20);
     textAlign(CENTER, CENTER);
-    let textToShow = 'Click as many circles as you can in 30 seconds!\n\nClick the circle to start!';
-    fill('black');
-    strokeWeight(0);
+    let textToShow = 'Click as many circles as you can in ' + TIME + ' seconds!\n\nClick the circle to start!';
+    fill('gold');
+    strokeWeight(1);
     stroke('black');
     text(textToShow, (WIDTH/2), ((3*WIDTH)/4));
     fill('green');
@@ -50,7 +51,7 @@ function createNewButton()
     buttonY = round(random(RAD_BUTTON + 25, WIDTH-RAD_BUTTON-25));
     while (Math.abs(tempX - buttonX) < (RAD_BUTTON/2)) { buttonX = round(random((RAD_BUTTON/2) + 25, WIDTH-(RAD_BUTTON/2)-25)); }
     while (Math.abs(tempY - buttonY) < (RAD_BUTTON/2)) { buttonY = round(random((RAD_BUTTON/2) + 25, WIDTH-(RAD_BUTTON/2)-25)); }
-    background(220);
+    background('maroon');
     fill('gold');
     strokeWeight(1);
     stroke('black');
@@ -59,7 +60,7 @@ function createNewButton()
     textAlign(CENTER,CENTER);
     textSize(30);
     strokeWeight(0);
-    fill('black');
+    fill('gold');
     text(timeText2, WIDTH - 105, 25);
     
 }
@@ -80,7 +81,7 @@ function mousePressed()
             textAlign(CENTER,CENTER);
             textSize(30);
             strokeWeight(0);
-            fill('black');
+            fill('gold');
             text(timeStart, WIDTH - 105, 25);
         } 
     }
@@ -89,28 +90,30 @@ function mousePressed()
 
 function endGame(totalScore)
 {
-    fill(220, 220, 220, 255);
-    rect(0,0, WIDTH, WIDTH);
-    let finalScore = "You clicked " + totalScore + " buttons in 30 seconds!";
+    background('maroon');
+    let finalScore = "You clicked " + totalScore;
+    if (totalScore == 1) { finalScore += " button"; }
+    else { finalScore += " buttons"; }
+    finalScore += " in " + TIME + " seconds!"
     textAlign(CENTER,CENTER);
     textSize(30);
     strokeWeight(0);
-    fill('black');
+    fill('gold');
     text(finalScore, WIDTH/2, (WIDTH*5)/18);
     started = false;
     buttonX = WIDTH/2;
     buttonY = WIDTH/2;
     fill('green');
     strokeWeight(1);
-    circle(WIDTH/2,WIDTH/2,RAD_BUTTON*2);
+    circle(WIDTH/2,WIDTH/2,RAD_BUTTON*1.5);
     textSize(40);
     textAlign(CENTER,CENTER);
     strokeWeight(0);
-    fill('black');
-    text("Play\nAgain!", (WIDTH/2)+5, WIDTH/2);
+    fill('gold');
+    text("Play\nAgain!", (WIDTH/2), WIDTH/2);
     gameEnd = true;
     clearInterval(timerVar);
-    timeLeft = 30;
+    timeLeft = TIME;
     score = 0;
 }
 
@@ -139,14 +142,14 @@ function timer()
     {
         if(timeLeft > 0)
         {
-            fill(220);
+            fill('maroon');
             rect(WIDTH - 210, 11, 210, 40);
             timeLeft--;
             let timeText = "Time Left: " + timeLeft;
             textAlign(CENTER,CENTER);
             textSize(30);
             strokeWeight(0);
-            fill('black');
+            fill('gold');
             text(timeText, WIDTH - 105, 25);
         } 
         else if(timeLeft <= 0)
@@ -166,7 +169,7 @@ function scoreText(newScore)
         textAlign(CENTER,CENTER);
         textSize(30);
         strokeWeight(0);
-        fill('black');
+        fill('gold');
         text(scoreText, 65, 25);
     }
     if(newScore >= 10)
@@ -175,7 +178,7 @@ function scoreText(newScore)
         textAlign(CENTER,CENTER);
         textSize(30);
         strokeWeight(0);
-        fill('black');
+        fill('gold');
         text(scoreText, 72, 25);
     }
 }
