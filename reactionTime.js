@@ -14,6 +14,18 @@ let timeLeft = TIME;
 let started = false;
 let gameEnd = false;
 let timerVar;
+let buttonSound;
+let endSound;
+let missSound;
+let numberOfTimesClicked = 0;
+
+function preload() {
+    soundFormats('mp3', 'ogg');
+    endSound = loadSound('sounds/endgamesound.mp3');
+    buttonSound = loadSound('sounds/boink.mp3');
+    missSound = loadSound('sounds/miss.mp3');
+    backgroundMusic = loadSound('sounds/bgmusic1.mp3');
+}
 
 function setup() {  
     if (!init) { // everything in this if block will only run once
@@ -82,8 +94,17 @@ function mousePressed()
             textSize(30);
             strokeWeight(0);
             fill('gold');
-            text(timeStart, WIDTH - 105, 25);
+            text(timeStart, WIDTH - 105, 25);     
+            backgroundMusic.play();
+            numberOfTimesClicked = 0;
         } 
+        buttonSound.play();
+        numberOfTimesClicked++;
+    }
+    else if(!checkInBounds())
+    {
+        missSound.play();
+        numberOfTimesClicked++;
     }
     return false;
 }
@@ -95,11 +116,14 @@ function endGame(totalScore)
     if (totalScore == 1) { finalScore += " button"; }
     else { finalScore += " buttons"; }
     finalScore += " in " + TIME + " seconds!"
+    let accuracyScore = (totalScore / numberOfTimesClicked)*100;
+    let accuracyText = "Accuracy: " + round(accuracyScore, 2) + "%";
     textAlign(CENTER,CENTER);
     textSize(30);
     strokeWeight(0);
     fill('gold');
     text(finalScore, WIDTH/2, (WIDTH*5)/18);
+    text(accuracyText, WIDTH/2, (WIDTH*13/18));
     started = false;
     buttonX = WIDTH/2;
     buttonY = WIDTH/2;
@@ -115,6 +139,8 @@ function endGame(totalScore)
     clearInterval(timerVar);
     timeLeft = TIME;
     score = 0;
+    endSound.play();
+    backgroundMusic.stop();
 }
 
 function checkInBounds()
@@ -182,4 +208,3 @@ function scoreText(newScore)
         text(scoreText, 72, 25);
     }
 }
-
